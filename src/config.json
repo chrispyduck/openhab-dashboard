@@ -1,0 +1,28 @@
+{
+  "openhab": {
+    "hostname": "10.2.11.128",
+    "port": 8080,
+    "ssl": false
+  },
+  "topbar": {
+    "time": {
+      "show": true,
+      "format": "HH:mm:ss"
+    },
+    "items": {
+      "media": {
+        "name": "Media_HarmonyHub_CurrentActivity",
+        "show": true
+      }
+    }
+  },
+  "views": {
+    "livingRoom": {
+      "title": "Living Room"
+    },
+    "media": {
+      "title": "Media"
+    }
+  },
+  "defaultView": "livingRoom"
+}

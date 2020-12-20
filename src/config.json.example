@@ -1,0 +1,20 @@
+{
+  "openhab": {
+    "hostname": "",
+    "port": 8080,
+    "ssl": false
+  },
+  "topbar": {
+    "time": {
+      "show": true,
+      "format": "shortTime"
+    },
+    "items": {
+      "media": {
+        "show": true,
+        "item": "Media_HarmonyHub_CurrentActivity"
+      }
+    }
+  },
+  "views": {}
+}
