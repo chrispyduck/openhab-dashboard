@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import DataContext from "./DataContext";
 import { IViewConfiguration } from "../data/IConfiguration";
 
 /**
  * The current view name, displayed in the app bar
  */
-const CurrentView = ({ view }: { view: IViewConfiguration }) => {
+const CurrentViewView: React.FC<{ view: IViewConfiguration }> = ({ view }) => {
   return (
     <span>
       {view.title}
@@ -14,9 +14,11 @@ const CurrentView = ({ view }: { view: IViewConfiguration }) => {
   );
 };
 
-const CurrentViewObserved = observer(CurrentView);
+const CurrentViewObserved = observer(CurrentViewView);
 
-export default () => {
+const CurrentView: React.FC = () => {
   const data = useContext(DataContext);
   return <CurrentViewObserved view={data.currentView} />;
 };
+
+export default CurrentView;

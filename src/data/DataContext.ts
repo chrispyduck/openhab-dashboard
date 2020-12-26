@@ -1,46 +1,95 @@
 import LiveEvents, { EventMessage, ItemStateEvent } from "./LiveEvents";
-import * as api from "./api";
 import IConfiguration, { IViewConfiguration, IItemTextDisplay } from "./IConfiguration";
 import DefaultConfiguration from "./DefaultConfiguration";
 import { merge } from "lodash";
-import { makeAutoObservable } from "mobx";
-import { Item, IItem } from "./Item";
+import { makeObservable, observable, computed, runInAction } from "mobx";
+import { Item } from "./Item";
+import { ItemsApi } from "./api/Items";
+import EventEmitter from "events";
 
-export default class DataContext {
-  constructor(configuration: IConfiguration) {
-    this.configuration = merge({}, DefaultConfiguration, configuration);
-    this.currentView = (this.configuration.defaultView) 
+export default class DataContext extends EventEmitter {
+  constructor() {
+    super();
+    this.loadConfiguration().then(null, e => {
+      console.error("Unhandled error loading config file", e);
+    });
+
+    this.events.on("ItemState", this.handleItemUpdate);
+
+    makeObservable(this);
+  }
+
+  private async loadConfiguration(): Promise<void> {
+    const response = await fetch("/config.json");
+    const config = <IConfiguration>await response.json();
+    this.configuration$ = merge({}, DefaultConfiguration, config);
+
+    this.currentView = (this.configuration.defaultView)
       ? this.configuration.views[this.configuration.defaultView] || Object.values(this.configuration.views)[0]
       : Object.values(this.configuration.views)[0];
 
-    const url = `${this.configuration.openhab.ssl ? "https": "http"}://${this.configuration.openhab.hostname}:${this.configuration.openhab.port}/`;
-    console.debug(`Connecting to OpenHAB at ${url}`);
+    this.baseUrl = `${this.configuration.openhab.ssl ? "https" : "http"}://${this.configuration.openhab.hostname}:${this.configuration.openhab.port}/rest`;
+    console.debug(`Connecting to OpenHAB at ${this.baseUrl}`);
 
-    this.events = new LiveEvents(url);
-    this.events.on("ItemState", this.handleItemUpdate);
-    
-    this.itemsApi = new api.ItemsApi(url + "rest");
-
-    makeAutoObservable(this);
+    this.events.init(this.baseUrl);
+    this.itemsApi.baseUrl = this.baseUrl;
+    this.isReady$ = true;
+    this.emit("ready", true);
   }
 
-  public readonly configuration: IConfiguration;
+  private readonly itemsApi = new ItemsApi();
+  private readonly events = new LiveEvents();
+  private baseUrl = "";
 
-  public readonly events: LiveEvents;
-  public readonly itemsApi: api.ItemsApi;
+  @observable
+  private isReady$ = false;
 
-  private readonly items: { [key: string]: IItem } = {};
-  public getItem = <TValue>(itemConfig: IItemTextDisplay): Item<TValue> => {
+  /** Indicates whether the data context is initialized and ready for use */
+  @computed
+  public get isReady(): boolean {
+    return this.isReady$;
+  }
+
+  @observable
+  private configuration$: IConfiguration | undefined = undefined;
+  public get configuration(): IConfiguration {
+    if (this.configuration$)
+      return this.configuration$;
+    throw new Error("No configuration has been loaded");
+  }
+
+  private readonly items: { [key: string]: Item } = {};
+  public getItem = (itemConfig?: IItemTextDisplay | string): Item | undefined => {
+    if (!itemConfig)
+      return;
+    if (typeof itemConfig === "string") {
+      itemConfig = {
+        show: true,
+        name: itemConfig
+      };
+    }
+
     let item = this.items[itemConfig.name];
     if (!item) {
-      item = new Item<TValue>(itemConfig);
-      item.fetchCurrentValue(this.itemsApi);
+      item = new Item(itemConfig, this.itemsApi);
       this.items[itemConfig.name] = item;
     }
-    return <Item<TValue>>item;
+    return <Item>item;
   }
 
-  public currentView: IViewConfiguration;
+  @observable
+  private currentView$: IViewConfiguration | undefined = undefined;
+  @computed
+  public get currentView(): IViewConfiguration {
+    if (!this.currentView$)
+      throw new Error("No view has been initialized");
+    return this.currentView$;
+  }
+  public set currentView(value: IViewConfiguration) {
+    runInAction(() => {
+      this.currentView$ = value;
+    });
+  }
 
   private handleItemUpdate = (event: EventMessage<ItemStateEvent>): void => {
     //smarthome/items/unifi_ChrisPhone_PhoneRSSI/state = 31 (Decimal)

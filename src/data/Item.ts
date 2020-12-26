@@ -1,41 +1,104 @@
 import { IItemTextDisplay } from "./IConfiguration";
-import { makeAutoObservable } from "mobx";
-import * as api from "./api";
+import { makeAutoObservable, runInAction, observable, computed, action } from "mobx";
 import { EventMessage, ItemStateEvent } from "./LiveEvents";
+import { ItemsApi } from "./api/Items";
+import { debounce } from "lodash";
 
-export interface IItem extends IItemTextDisplay {
-  fetchCurrentValue(client: api.ItemsApi): Promise<void>;
-  handleStatusEvent(field: string, event: EventMessage<ItemStateEvent>): void;
-}
-
-export class Item<TValue> implements IItem {
-  constructor(config: IItemTextDisplay, value?: TValue) {
-    this.name = config.name;
-    this.show = config.show;
-    if (value)
-      this.value$ = value;
-    makeAutoObservable(this);
-  }
-
-  public readonly name: string;
-  public readonly show: boolean;
-
-  private value$: TValue | undefined = undefined;
-  public get value(): TValue | undefined {
-    return this.value$;
-  }
-  public set value(val: TValue | undefined) {
-    this.value$ = val;
-  }
-
-  public handleStatusEvent = (field: string, event: EventMessage<ItemStateEvent>): void => {
-    if (field == "state") {
-      this.value$ = <TValue><unknown>event.payload.value;
+export class Item {
+  constructor(config?: IItemTextDisplay, client?: ItemsApi, value?: string) {
+    if (!config) {
+      this.name = "default";
+      this.show = false;
+      this.isEmpty = true;
+    }
+    else {
+      this.name = config.name;
+      this.show = config.show;
+      this.client = client;
+      if (value)
+        this.value$ = value;
+      makeAutoObservable(this);
+      this.fetchCurrentValue().then(null, e => {
+        console.error(`Failed to obtain information for item ${this.name}`, e);
+      });
     }
   }
 
-  public fetchCurrentValue = async (client: api.ItemsApi): Promise<void> => {
-    const result = await client.getItemData(this.name);
-    this.value$ = <TValue><unknown>result.body.state; //todo: convert and interpret
+  private readonly client: ItemsApi | undefined;
+  public readonly isEmpty: boolean = false;
+  public readonly name: string;
+  public readonly show: boolean;
+
+  @observable public type = "unknown";
+  @observable public category = "unknown";
+  @observable public supportedCommands: Array<{
+    command: string,
+    displayName: string
+  }> = [];
+
+  @observable
+  private displayName$: string | undefined;
+
+  @computed
+  public getDisplayName = (): string => {
+    return this.displayName$ || this.name;
+  };
+
+  @observable
+  private value$: string | undefined = undefined;
+
+  @computed
+  public getValue = (): string | undefined => {
+    return this.value$;
   }
+
+  @action
+  public setValue = (val: string | undefined): void => {
+    this.value$ = val;
+    if (val !== undefined)
+      this.sendDebounced(val);
+  }
+
+  @action
+  public handleStatusEvent = (field: string, event: EventMessage<ItemStateEvent>): void => {
+    if (field == "state") {
+      runInAction(() => {
+        this.value$ = event.payload.value;
+      });
+    }
+  }
+
+  @action
+  public fetchCurrentValue = async (): Promise<void> => {
+    if (!this.client)
+      return;
+    const detail = await this.client.getDetailAsync(this.name);
+    runInAction(() => {
+      this.displayName$ = detail.label || detail.name;
+      this.value$ = detail.state;
+      this.type = detail.type;
+      this.category = detail.category;
+      this.supportedCommands.length = 0;
+      detail.commandDescription
+        ?.commandOptions
+        ?.map(cmd => ({ command: cmd.command, displayName: cmd.label }))
+        ?.forEach(cmd => this.supportedCommands.push(cmd));
+    });
+  }
+
+  @action
+  public send = async (value: string): Promise<void> => {
+    if (!this.client)
+      return;
+    console.log(`Item[${this.name}].state -> ${value}`);
+    await this.client.setStateAsync(this.name, value);
+  }
+
+  private sendDebounced = debounce(this.send, 250, {
+    leading: true,
+    trailing: true,
+    maxWait: 800,
+  });
 }
+
+export const EmptyItem = new Item();

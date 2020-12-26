@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import dateFormat from "dateformat";
 
-export default function Clock({ format }: { format: string | undefined }) {
+const Clock: React.FC<{ format: string | undefined }> = ({ format }) => {
   const [time, setTime] = useState(new Date());
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -14,4 +14,6 @@ export default function Clock({ format }: { format: string | undefined }) {
       {dateFormat(time, format || "shortTime")}
     </span>
   );
-}
+};
+
+export default Clock;

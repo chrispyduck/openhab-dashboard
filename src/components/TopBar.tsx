@@ -1,8 +1,9 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { AppBar, Toolbar, IconButton, Typography, Button, List, ListItem, ListItemText, Hidden, Drawer } from "@material-ui/core";
+import { AppBar, Toolbar, IconButton, Typography, List, ListItem, ListItemText, Hidden, Drawer } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
+import RefreshIcon from "@material-ui/icons/Refresh";
 import DataContext from "./DataContext";
 import Clock from "./Clock";
 import CurrentView from "./CurrentView";
@@ -22,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+  },
+  refreshButton: {
+    marginLeft: theme.spacing(2),
   },
   title: {
     marginRight: theme.spacing(2),
@@ -47,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
 }));
 
-export default function TopBar() {
+const TopBar: React.FC = () => {
   const classes = useStyles();
   const theme = useTheme();
   const data = useContext(DataContext);
@@ -61,13 +65,20 @@ export default function TopBar() {
     <div>
       <List>
         {Object.entries(data.configuration.views).map(([key, view]) => (
-          <ListItem button key={key}>
+          <ListItem button key={key} onClick={() => {
+            data.currentView = view;
+            toggleDrawer();
+          }}>
             <ListItemText primary={view.title} />
           </ListItem>
         ))}
       </List>
     </div>
   );
+
+  const refresh = () => {
+    window.location.reload();
+  };
 
   return (
     <div className={classes.root}>
@@ -88,11 +99,14 @@ export default function TopBar() {
               <div className={classes.grow} />
             </>
           )}
-          {Object.values(data.configuration.topbar.items).map(item => (
-            <span className={classes.items}>
+          {Object.values(data.configuration.topbar.items).map((item, index) => (
+            <span className={classes.items} key={index}>
               <ItemStatusDisplay item={item} />
             </span>
           ))}
+          <IconButton edge="start" className={classes.refreshButton} color="inherit" aria-label="refresh" onClick={refresh}>
+            <RefreshIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
@@ -124,3 +138,4 @@ export default function TopBar() {
   );
 }
 
+export default TopBar;

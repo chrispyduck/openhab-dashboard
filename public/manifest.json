@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "openhab-dashboard",
+  "name": "Touch-friendly OpenHAB Dashboard",
   "icons": [
     {
       "src": "favicon.ico",

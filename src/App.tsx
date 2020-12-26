@@ -1,14 +1,30 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import TopBar from "./components/TopBar";
+import View from "./components/View";
+import DataContext from "./components/DataContext";
 import "./App.css";
 
-function App() {
+const App: React.FC = () => {
+  const context = useContext(DataContext);
+  const [ready, setReady] = useState(context.isReady);
+
+  useEffect(() => {
+    context.on("ready", () => {
+      setReady(true);
+    });
+  }, []);
+
+  if (!ready)
+    return (
+      <div>Loading...</div>
+    );
+
   return (
     <div className="App">
-      <TopBar/>
-      toodlleoo!
+      <TopBar />
+      <View />
     </div>
   );
-}
+};
 
 export default App;
