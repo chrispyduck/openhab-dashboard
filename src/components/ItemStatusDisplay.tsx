@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { makeStyles } from "@material-ui/core/styles";
 import DataContext from "./DataContext";
 import { Item } from "../data/Item";
-import { IItemTextDisplay } from "../data/IConfiguration";
+import { IItemDisplaySettings } from "../data/configuration/Items";
 import { Grid, Menu, MenuItem, Button, ListItemIcon, ListItemText } from "@material-ui/core";
 import Icon from "./Icon";
 
@@ -91,7 +91,7 @@ const ItemStatusDisplayView: React.FC<{
 const ItemStatusDisplayObserved = observer(ItemStatusDisplayView);
 
 const ItemStatusDisplay: React.FC<{
-  item: IItemTextDisplay | Item | string,
+  item: IItemDisplaySettings | Item | string,
   icon?: string
 }> = (props) => {
   let item: typeof props.item | undefined = props.item;
@@ -100,9 +100,9 @@ const ItemStatusDisplay: React.FC<{
     item = data.getItem(item);
   } else if (item instanceof Item) {
     // nothing to do here
-  } else if (typeof item === "object" && !!item.name) {
+  } else if (typeof item === "object" && !!item.itemName) {
     const data = useContext(DataContext);
-    item = data.getItem(item.name);
+    item = data.getItem(item.itemName);
   }
 
   if (!item)

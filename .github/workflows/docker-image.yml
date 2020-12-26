@@ -28,7 +28,7 @@ jobs:
       id: docker_meta
       uses: crazy-max/ghaction-docker-meta@v1
       with:
-        images: chrispyduck/openhab-dashboard
+        images: ${{ secrets.DOCKER_HUB_USERNAME }}/openhab-dashboard
         tag-semver: |
           {{version}}
           {{major}}.{{minor}}

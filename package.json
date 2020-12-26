@@ -58,7 +58,8 @@
     "@babel/plugin-transform-typescript": "^7.12.1",
     "@rescripts/cli": "0.0.15",
     "@rescripts/rescript-use-babel-config": "0.0.10",
-    "@types/request": "^2.48.5"
+    "@types/request": "^2.48.5",
+    "typedoc": "^0.19.2"
   },
   "rescripts": [
     [

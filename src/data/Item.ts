@@ -1,18 +1,18 @@
-import { IItemTextDisplay } from "./IConfiguration";
+import { IItemDisplaySettings } from "./configuration/Items";
 import { makeAutoObservable, runInAction, observable, computed, action } from "mobx";
 import { EventMessage, ItemStateEvent } from "./LiveEvents";
 import { ItemsApi } from "./api/Items";
 import { debounce } from "lodash";
 
 export class Item {
-  constructor(config?: IItemTextDisplay, client?: ItemsApi, value?: string) {
+  constructor(config?: IItemDisplaySettings, client?: ItemsApi, value?: string) {
     if (!config) {
       this.name = "default";
       this.show = false;
       this.isEmpty = true;
     }
     else {
-      this.name = config.name;
+      this.name = config.itemName;
       this.show = config.show;
       this.client = client;
       if (value)

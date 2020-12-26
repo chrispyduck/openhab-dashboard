@@ -3,7 +3,7 @@ import { Item } from "../../data/Item";
 import { makeStyles } from "@material-ui/core/styles";
 import { Fab, Grid, Slider, Typography } from "@material-ui/core";
 import Icon from "../Icon";
-import { IDimmer } from "../../data/IConfiguration";
+import { IDimmer } from "../../data/configuration/Items";
 import DataContext from "../DataContext";
 import { observer } from "mobx-react";
 

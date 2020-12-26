@@ -1,5 +1,7 @@
 import LiveEvents, { EventMessage, ItemStateEvent } from "./LiveEvents";
-import IConfiguration, { IViewConfiguration, IItemTextDisplay } from "./IConfiguration";
+import { IItemDisplaySettings } from "./configuration/Items";
+import IConfiguration from "./configuration/Configuration";
+import { IViewConfiguration } from "./configuration/Views";
 import DefaultConfiguration from "./DefaultConfiguration";
 import { merge } from "lodash";
 import { makeObservable, observable, computed, runInAction } from "mobx";
@@ -59,20 +61,20 @@ export default class DataContext extends EventEmitter {
   }
 
   private readonly items: { [key: string]: Item } = {};
-  public getItem = (itemConfig?: IItemTextDisplay | string): Item | undefined => {
+  public getItem = (itemConfig?: IItemDisplaySettings | string): Item | undefined => {
     if (!itemConfig)
       return;
     if (typeof itemConfig === "string") {
       itemConfig = {
         show: true,
-        name: itemConfig
+        itemName: itemConfig
       };
     }
 
-    let item = this.items[itemConfig.name];
+    let item = this.items[itemConfig.itemName];
     if (!item) {
       item = new Item(itemConfig, this.itemsApi);
-      this.items[itemConfig.name] = item;
+      this.items[itemConfig.itemName] = item;
     }
     return <Item>item;
   }

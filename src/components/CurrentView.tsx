@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { observer } from "mobx-react";
 import DataContext from "./DataContext";
-import { IViewConfiguration } from "../data/IConfiguration";
+import { IViewConfiguration } from "../data/configuration/Views";
 
 /**
  * The current view name, displayed in the app bar

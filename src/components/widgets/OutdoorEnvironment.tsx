@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Item, EmptyItem } from "../../data/Item";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
-import { IOutdoorEnvironment } from "../../data/IConfiguration";
+import { IOutdoorEnvironment } from "../../data/configuration/Items";
 import DataContext from "../DataContext";
 import { observer } from "mobx-react";
 
