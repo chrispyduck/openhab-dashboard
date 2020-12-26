@@ -34,6 +34,7 @@ const Icon: React.FC<{ icon: string }> = ({ icon }) => {
 
   switch (libraryName) {
     case "material": {
+      /* eslint-disable  @typescript-eslint/no-explicit-any */
       const Icon = Icons[iconName] as any;
       if (!Icon)
         break;
