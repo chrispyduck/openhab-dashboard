@@ -1,0 +1,6 @@
+apiVersion: v2
+name: openhab-dashboard
+description: A touch friendly (and hopefully less buggy) OpenHAB dashboard based on Material UI and React
+type: application
+version: 0.1.0
+appVersion: 0.1.0

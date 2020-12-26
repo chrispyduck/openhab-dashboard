@@ -34,7 +34,8 @@
     "build": "rescripts build",
     "test": "rescripts test",
     "eject": "rescripts eject",
-    "lint": "npx eslint 'src/**/*.ts' 'src/**/*.tsx'"
+    "lint": "npx eslint 'src/**/*.ts' 'src/**/*.tsx'",
+    "docs": "npx tsdoc"
   },
   "eslintConfig": {
     "extends": [
