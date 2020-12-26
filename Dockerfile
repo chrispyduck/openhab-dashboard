@@ -1,19 +1,19 @@
-ARG IMAGE=nodejs:15-alpine
+ARG NODE_VERSION=15.5-alpine
 
-FROM ${IMAGE} AS build
+FROM node:${NODE_VERSION} AS build
 ARG CI=true
 WORKDIR /build
-ADD package.json
-ADD package-lock.json
+COPY package.json .
+COPY package-lock.json .
 RUN npm install
 
-ADD . .
+COPY . .
 RUN npm run build
 
-FROM ${IMAGE} AS run
+FROM node:${NODE_VERSION} AS run
 RUN npm install -g serve
 
-ADD --from=build ./build .
+COPY --from=build ./build .
 
 EXPOSE 3000
 ENTRYPOINT [ "serve", "-p", "3000" ]
