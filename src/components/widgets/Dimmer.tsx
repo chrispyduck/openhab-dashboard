@@ -68,7 +68,7 @@ const DimmerView = ({ item, config }: { item: Item, config: IDimmer }) => {
   const classes = useStyles();
   const currentValue = convertStringPercentageToSliderValue(item.getValue());
 
-  const handleChange = (_event: React.ChangeEvent, value: number | number[]) => {
+  const handleChange = (_event: React.ChangeEvent<Record<string, never>>, value: number | number[]) => {
     const num = alignSliderValueToDimmerPercentage(value as number);
     item.setValue(num.toString());
   };
