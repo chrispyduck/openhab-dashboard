@@ -1,6 +1,6 @@
 ARG IMAGE=nodejs:15-alpine
 
-FROM ${IMAGE} build
+FROM ${IMAGE} AS build
 ARG CI=true
 WORKDIR /build
 ADD package.json
@@ -8,10 +8,9 @@ ADD package-lock.json
 RUN npm install
 
 ADD . .
-RUN npm lint
 RUN npm run build
 
-FROM ${IMAGE} run
+FROM ${IMAGE} AS run
 RUN npm install -g serve
 
 ADD --from=build ./build .
