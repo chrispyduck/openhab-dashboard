@@ -18,7 +18,7 @@ const CurrentViewObserved = observer(CurrentViewView);
 
 const CurrentView: React.FC = () => {
   const data = useContext(DataContext);
-  return <CurrentViewObserved view={data.currentView} />;
+  return <CurrentViewObserved view={data.currentViewConfig} />;
 };
 
 export default CurrentView;

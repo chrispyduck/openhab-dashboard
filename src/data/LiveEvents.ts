@@ -10,9 +10,17 @@ export default class LiveEvents extends EventEmitter {
   private events: EventSource | undefined = undefined;
 
   init = (url: string): void => {
-    if (this.events !== undefined)
-      throw new Error("Already initialized");
-    this.events = new EventSource(url + "/events");
+    const endpoint = url + "/events";
+    if (this.events !== undefined) {
+      if (this.events.url == endpoint) {
+        console.warn("LiveEvents already initialized. Ignoring init request.");
+        return;
+      } else {
+        this.events.onmessage = null;
+        this.events.close();
+      }
+    }
+    this.events = new EventSource(endpoint);
     this.events.onmessage = this.onEvent;
   }
 

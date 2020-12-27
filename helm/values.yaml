@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: chrispyduck/openhab-dashboard
+  repository: xtrachrispyduck/openhab-dashboard
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""

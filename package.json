@@ -25,6 +25,7 @@
     "mobx-react": "^7.0.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "typescript": "^4.1.3",
     "web-vitals": "^0.2.4"
@@ -35,7 +36,8 @@
     "test": "rescripts test",
     "eject": "rescripts eject",
     "lint": "npx eslint 'src/**/*.ts' 'src/**/*.tsx'",
-    "docs": "npx tsdoc"
+    "docs": "npx tsdoc",
+    "helm.prep": "npx shx cp public/config/*.json helm/config/"
   },
   "eslintConfig": {
     "extends": [
@@ -59,6 +61,7 @@
     "@babel/plugin-transform-typescript": "^7.12.1",
     "@rescripts/cli": "0.0.15",
     "@rescripts/rescript-use-babel-config": "0.0.10",
+    "@types/react-router-dom": "^5.1.6",
     "@types/request": "^2.48.5",
     "typedoc": "^0.19.2"
   },

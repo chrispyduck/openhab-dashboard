@@ -103,8 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
-# config file
-public/config.json
+# config files
+public/config/*.json
+helm/config/*.json
 
 # generated documentation
 docs

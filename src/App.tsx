@@ -1,28 +1,20 @@
-import React, { useContext, useState, useEffect } from "react";
-import TopBar from "./components/TopBar";
+import React from "react";
+import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import View from "./components/View";
-import DataContext from "./components/DataContext";
+import { withConfiguration } from "./components/DataContext";
 import "./App.css";
 
+const ViewWithConfiguration = withConfiguration(View);
+
 const App: React.FC = () => {
-  const context = useContext(DataContext);
-  const [ready, setReady] = useState(context.isReady);
-
-  useEffect(() => {
-    context.on("ready", () => {
-      setReady(true);
-    });
-  }, []);
-
-  if (!ready)
-    return (
-      <div>Loading...</div>
-    );
-
   return (
     <div className="App">
-      <TopBar />
-      <View />
+      <Router>
+        <Route exact path="/">
+          <Redirect to="/default"/>
+        </Route>
+        <Route path="/:config" component={ViewWithConfiguration}/>
+      </Router>
     </div>
   );
 };

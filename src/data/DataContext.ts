@@ -1,10 +1,10 @@
 import LiveEvents, { EventMessage, ItemStateEvent } from "./LiveEvents";
 import { IItemDisplaySettings } from "./configuration/Items";
 import IConfiguration from "./configuration/Configuration";
-import { IViewConfiguration } from "./configuration/Views";
+import { IViewConfiguration, ViewType } from "./configuration/Views";
 import DefaultConfiguration from "./DefaultConfiguration";
 import { merge } from "lodash";
-import { makeObservable, observable, computed, runInAction } from "mobx";
+import { makeObservable, observable, computed, action } from "mobx";
 import { Item } from "./Item";
 import { ItemsApi } from "./api/Items";
 import EventEmitter from "events";
@@ -12,23 +12,16 @@ import EventEmitter from "events";
 export default class DataContext extends EventEmitter {
   constructor() {
     super();
-    this.loadConfiguration().then(null, e => {
-      console.error("Unhandled error loading config file", e);
-    });
-
     this.events.on("ItemState", this.handleItemUpdate);
-
     makeObservable(this);
   }
 
-  private async loadConfiguration(): Promise<void> {
-    const response = await fetch("/config.json");
+  public async loadConfiguration(name: string): Promise<void> {
+    const response = await fetch(`/config/${name}.json`);
     const config = <IConfiguration>await response.json();
     this.configuration$ = merge({}, DefaultConfiguration, config);
 
-    this.currentView = (this.configuration.defaultView)
-      ? this.configuration.views[this.configuration.defaultView] || Object.values(this.configuration.views)[0]
-      : Object.values(this.configuration.views)[0];
+    this.setCurrentView(this.defaultViewKey);
 
     this.baseUrl = `${this.configuration.openhab.ssl ? "https" : "http"}://${this.configuration.openhab.hostname}:${this.configuration.openhab.port}/rest`;
     console.debug(`Connecting to OpenHAB at ${this.baseUrl}`);
@@ -60,7 +53,55 @@ export default class DataContext extends EventEmitter {
     throw new Error("No configuration has been loaded");
   }
 
+  @computed
+  public get defaultViewKey(): string {
+    return (this.configuration.defaultView)
+      ? this.configuration.defaultView.toString()
+      : Object.keys(this.configuration.views)[0].toString();
+  }
+
+  @computed
+  public get defaultView(): ViewType {
+    return (this.configuration.defaultView)
+      ? this.configuration.views[this.configuration.defaultView] || Object.values(this.configuration.views)[0]
+      : Object.values(this.configuration.views)[0];
+  }
+
+  public getViewByKey = (key: string): ViewType => {
+    const match = this.configuration.views[key];
+    if (key)
+      return match;
+    throw new Error(`No matching view for key: ${key}`);
+  }
+
+  @action
+  public setCurrentView = (key: string): void => {
+    const view = this.getViewByKey(key);
+    this.currentViewKey$ = key;
+    this.currentViewConfig$ = view;
+  }
+
+  @observable
+  private currentViewConfig$: IViewConfiguration | undefined = undefined;
+  @computed
+  public get currentViewConfig(): IViewConfiguration {
+    if (!this.currentViewConfig$)
+      throw new Error("No view has been initialized");
+    return this.currentViewConfig$;
+  }
+
+  @observable 
+  private currentViewKey$ = "";
+  
+  @computed
+  public get currentViewKey(): string {
+    if (!this.currentViewKey$)
+      throw new Error("No view has been initialized");
+    return this.currentViewKey$;
+  }
+
   private readonly items: { [key: string]: Item } = {};
+
   public getItem = (itemConfig?: IItemDisplaySettings | string): Item | undefined => {
     if (!itemConfig)
       return;
@@ -77,20 +118,6 @@ export default class DataContext extends EventEmitter {
       this.items[itemConfig.itemName] = item;
     }
     return <Item>item;
-  }
-
-  @observable
-  private currentView$: IViewConfiguration | undefined = undefined;
-  @computed
-  public get currentView(): IViewConfiguration {
-    if (!this.currentView$)
-      throw new Error("No view has been initialized");
-    return this.currentView$;
-  }
-  public set currentView(value: IViewConfiguration) {
-    runInAction(() => {
-      this.currentView$ = value;
-    });
   }
 
   private handleItemUpdate = (event: EventMessage<ItemStateEvent>): void => {

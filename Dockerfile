@@ -11,9 +11,12 @@ COPY . .
 RUN npm run build
 
 FROM node:${NODE_VERSION} AS run
+
 RUN npm install -g serve
 
-COPY --from=build ./build .
+WORKDIR /app
+
+COPY --from=build /build/build /app
 
 EXPOSE 3000
 ENTRYPOINT [ "serve", "-p", "3000" ]

@@ -1,6 +1,6 @@
 import React from "react";
 import { IDashboardItem } from "../data/configuration/Items";
-import { IDashboardConfiguration } from "../data/configuration/Views";
+import { IViewConfiguration, IDashboardConfiguration } from "../data/configuration/Views";
 import { Item } from "../data/Item";
 import { Grid, Paper } from "@material-ui/core";
 import Dimmer from "./widgets/Dimmer";
@@ -45,11 +45,12 @@ const TypeToDashboardItem = (config: IDashboardItem): React.ReactNode => {
   return <Component config={config} />;
 };
 
-const Dashboard: React.FC<{ configuration: IDashboardConfiguration }> = ({ configuration }) => {
+const Dashboard: React.FC<{ configuration: IViewConfiguration }> = ({ configuration }) => {
   const classes = useStyles();
+  const config = configuration as IDashboardConfiguration;
   return (
     <Grid container>
-      {configuration.items.map((item, index) => {
+      {config.items.map((item, index) => {
         return (
           <Grid item key={index} xs={item.cols || 12}>
             <Paper elevation={2} className={classes.item}>

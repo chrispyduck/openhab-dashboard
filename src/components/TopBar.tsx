@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { AppBar, Toolbar, IconButton, Typography, List, ListItem, ListItemText, Hidden, Drawer } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -55,6 +56,7 @@ const TopBar: React.FC = () => {
   const classes = useStyles();
   const theme = useTheme();
   const data = useContext(DataContext);
+  const history = useHistory();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const toggleDrawer = () => {
@@ -66,8 +68,10 @@ const TopBar: React.FC = () => {
       <List>
         {Object.entries(data.configuration.views).map(([key, view]) => (
           <ListItem button key={key} onClick={() => {
-            data.currentView = view;
+            // this is rather ugly (updating the DataContext and the route)
+            data.setCurrentView(key);
             toggleDrawer();
+            history.push(`./${key}`);
           }}>
             <ListItemText primary={view.title} />
           </ListItem>
