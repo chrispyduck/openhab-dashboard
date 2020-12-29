@@ -34,8 +34,8 @@ const IndoorEnvironmentView = (props: {
         <Icon icon="fas:thermometer-half" />
       </Grid>
       <Grid item className={classes.values} xs={7}>
-        <Typography variant="subtitle1">{props.roomTemperature.getValue()}</Typography>
-        <Typography variant="subtitle1">{props.roomHumidity.getValue()}</Typography>
+        <Typography variant="h5">{Math.round(Number.parseFloat(props.roomTemperature.getValue() || "0") * 10) / 10} °F</Typography>
+        <Typography variant="subtitle1">{Math.round(Number.parseFloat(props.roomHumidity.getValue() || "0"))} %</Typography>
       </Grid>
     </Grid>
   );
