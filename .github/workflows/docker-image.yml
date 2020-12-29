@@ -31,7 +31,9 @@ jobs:
         images: ${{ secrets.DOCKER_HUB_USERNAME }}/openhab-dashboard
         tag-semver: |
           {{version}}
+          {{major}}
           {{major}}.{{minor}}
+          {{major}}.{{minor}}.{{patch}}
           
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
