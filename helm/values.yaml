@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: xtrachrispyduck/openhab-dashboard
-  pullPolicy: IfNotPresent
+  pullPolicy: Always #IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: main
 
@@ -24,12 +24,7 @@ podAnnotations: {}
 podSecurityContext: {}
 
 securityContext:
-  capabilities:
-    drop:
-    - ALL
   readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 1883
 
 service:
   type: LoadBalancer
