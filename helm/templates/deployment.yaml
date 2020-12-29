@@ -51,7 +51,8 @@ spec:
               port: http
           volumeMounts:
           - name: configs
-            mountPath: /app/config
+            mountPath: /app/config.json
+            subPath: config.json
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
