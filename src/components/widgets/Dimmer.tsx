@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   itemName: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(0),
     marginLeft: theme.spacing(2),
     textAlign: "left",
   }

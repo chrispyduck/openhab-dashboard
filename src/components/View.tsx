@@ -5,6 +5,8 @@ import { IViewConfiguration } from "../data/configuration/Views";
 import TopBar from "./TopBar";
 import { Switch, Route, Redirect, useRouteMatch } from "react-router-dom";
 
+import Screensaver from "./Screensaver";
+
 const resolveViewComponent = (type: string): React.FC<{ configuration: IViewConfiguration }> => {
   switch (type) {
     case "dashboard": {
@@ -21,16 +23,21 @@ const View: React.FC = () => {
   const { path, url } = useRouteMatch();
   return (
     <>
-      <TopBar/>
+      <TopBar />
       <Switch>
         <Route exact path={path}>
-          <Redirect to={`${url}/${data.defaultViewKey}`}/>
+          <Redirect to={`${url}/${data.defaultViewKey}`} />
         </Route>
         {Object.entries(data.configuration.views).map(([key, config]) => (
           <Route key={key} path={`${path}/${key}`} render={(routeProps) => {
             const Component = resolveViewComponent(config.type);
-            return <Component {...routeProps} configuration={config}/>
-          }}/>
+            return (
+              <>
+                <Component {...routeProps} configuration={config} />
+                <Screensaver />
+              </>
+            );
+          }} />
         ))}
       </Switch>
     </>

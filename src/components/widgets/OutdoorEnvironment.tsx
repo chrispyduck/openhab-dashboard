@@ -15,6 +15,7 @@ const useStyles = makeStyles(() => ({
     textAlign: "left",
   },
   icon: {
+    marginLeft: "-10px",
     alignItems: "center",
     justifyContent: "center",
   }
