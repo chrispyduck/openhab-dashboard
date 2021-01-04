@@ -7,7 +7,7 @@
   "topbar": {
     "time": {
       "show": true,
-      "format": "HH:mm:ss"
+      "format": "HH:MM:ss"
     },
     "items": {
       "media": {
@@ -29,8 +29,8 @@
         },
         {
           "type": "indoor",
-          "roomTemperatureItem": "X",
-          "roomHumidityItem": "X",
+          "roomTemperatureItem": "LivingRoom_Temperature",
+          "roomHumidityItem": "LivingRoom_Humidity",
           "cols": 3
         },
         {

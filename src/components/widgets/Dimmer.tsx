@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   sliderCell: {
     flexGrow: 1,
-    maxWidth: "93%" //todo: "93%" is needed to make this look good on chrome
+    maxWidth: "91%" //todo: "93%" is needed to make this look good on chrome
   },
   slider: {
     marginTop: theme.spacing(1),

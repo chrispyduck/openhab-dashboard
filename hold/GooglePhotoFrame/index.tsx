@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/*import React, { useEffect, useState } from "react";
 import { google } from "googleapis";
 import { Credentials } from "google-auth-library/build/src/auth/credentials";
 import { OAuth2Client } from "google-auth-library/build/src/auth/oauth2client";
@@ -255,4 +255,5 @@ const PhotoFrame: React.FC<IScreensaverProps> = (props) => {
   return <div className={classes.image} style={{backgroundImage: `url("${currentMedia.url}")`}}/>;
 };
 
-export default PhotoFrame;
+export default PhotoFrame;*/
+export {}
