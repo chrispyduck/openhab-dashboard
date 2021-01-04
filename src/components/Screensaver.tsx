@@ -1,12 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import DataContext from "./DataContext";
-import { Paper, Dialog, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { Paper, Dialog, createStyles, makeStyles } from "@material-ui/core";
 import { useIdle } from "react-use";
 import { IScreensaverConfiguration } from "../data/configuration/Screensaver";
 //import GooglePhotoFrame from "./screensavers/GooglePhotoFrame";
 import { IScreensaverProps } from "./screensavers/IScreensaverProps";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     container: {
       backgroundColor: "black",
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const resolveScreensaver = (config: IScreensaverConfiguration): React.ElementType<IScreensaverProps> => {
   switch (config.type) {
     //case "google-photos": return GooglePhotoFrame;
-    default: return (props: IScreensaverProps) => {
+    default: return () => {
       return <span>&nbsp;</span>;
     };
   }
