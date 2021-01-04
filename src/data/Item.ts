@@ -91,7 +91,7 @@ export class Item {
     if (!this.client)
       return;
     console.log(`Item[${this.name}].state -> ${value}`);
-    await this.client.setStateAsync(this.name, value);
+    await this.client.sendCommandAsync(this.name, value);
   }
 
   private sendDebounced = debounce(this.send, 250, {

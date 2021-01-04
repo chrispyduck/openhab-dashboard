@@ -48,21 +48,8 @@ export class ItemsApi {
     await response.text();
   }
 
-  public setStateAsync = async (item: string, value: string): Promise<void> => {
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "text/plain"
-      },
-      body: value,
-    };
-
-    const response = await fetch(`${this.baseUrl}/items/${item}/state`, options);
-    await response.text();
-  }
-
-  public setStateSync = (item: string, value: string): void => {
-    this.setStateAsync(item, value).catch(err => {
+  public sendCommandSync = (item: string, value: string): void => {
+    this.sendCommandAsync(item, value).catch(err => {
       console.log(`Error in ItemsApi.setState(${item})`, err);
     });
   }
