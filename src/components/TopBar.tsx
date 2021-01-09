@@ -67,7 +67,7 @@ const TopBar: React.FC = () => {
     <div>
       <List>
         {Object.entries(data.configuration.views).map(([key, view]) => (
-          <ListItem button key={key} onClick={() => {
+          <ListItem button key={key} selected={data.currentViewKey === key} onClick={() => {
             // this is rather ugly (updating the DataContext and the route)
             data.setCurrentView(key);
             toggleDrawer();

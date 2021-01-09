@@ -23,16 +23,20 @@ const View: React.FC = () => {
   const { path, url } = useRouteMatch();
   return (
     <>
-      <TopBar />
       <Switch>
         <Route exact path={path}>
           <Redirect to={`${url}/${data.defaultViewKey}`} />
         </Route>
         {Object.entries(data.configuration.views).map(([key, config]) => (
-          <Route key={key} path={`${path}/${key}`} render={(routeProps) => {
+          <Route key={key} path={`${path}/${key}`} render={(routeProps) => {      
+            if (key !== data.currentViewKey) {
+              data.setCurrentView(key);
+            }
+
             const Component = resolveViewComponent(config.type);
             return (
               <>
+                <TopBar />
                 <Component {...routeProps} configuration={config} />
                 <Screensaver />
               </>
