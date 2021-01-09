@@ -72,7 +72,10 @@ const ItemStatusDisplayView: React.FC<{
         onClose={closeMenu}
       >
         {props.item.supportedCommands.map(cmd => (
-          <MenuItem key={cmd.command} onClick={() => props.item.send(cmd.command)}>
+          <MenuItem key={cmd.command} onClick={() => {
+            props.item.send(cmd.command);
+            closeMenu();
+          }}>
             <ListItemIcon>
               {cmd.command === currentValue
                 ? <Icon icon="material:RadioButtonChecked" />

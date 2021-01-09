@@ -7,6 +7,7 @@ import Dimmer from "./widgets/Dimmer";
 import { makeStyles } from "@material-ui/core/styles";
 import OutdoorEnvironment from "./widgets/OutdoorEnvironment";
 import IndoorEnvironment from "./widgets/IndoorEnvironment";
+import Media from "./widgets/Media";
 
 const useStyles = makeStyles((theme) => ({
   item: {
@@ -14,6 +15,11 @@ const useStyles = makeStyles((theme) => ({
     height: "116px",
     display: "flex"
   },
+  itemX2: {
+    margin: theme.spacing(1),
+    height: `${theme.spacing(1) + (116 * 2)}px`,
+    display: "flex"
+  }
 }));
 
 export interface IDashboardItemProps {
@@ -21,25 +27,19 @@ export interface IDashboardItemProps {
   item: Item,
 }
 
+type DashboardMappings = { [key: string]: React.ElementType };
+const DashboardItemMappings: DashboardMappings = {
+  "dimmer": Dimmer,
+  "outdoor": OutdoorEnvironment,
+  "indoor": IndoorEnvironment,
+  "media": Media,
+};
+
 const TypeToDashboardItem = (config: IDashboardItem): React.ReactNode => {
-  let Component: React.ElementType;
-  switch (config.type) {
-    case "dimmer": {
-      Component = Dimmer;
-      break;
-    }
-    case "outdoor": {
-      Component = OutdoorEnvironment;
-      break;
-    }
-    case "indoor": {
-      Component = IndoorEnvironment;
-      break;
-    }
-    default: {
-      console.warn(`Unspported dashboard item: ${config.type}`);
-      return null;
-    }
+  const Component = DashboardItemMappings[config.type];
+  if (!Component) {
+    console.warn(`Unspported dashboard item: ${config.type}`);
+    return null;
   }
 
   return <Component config={config} />;
@@ -53,7 +53,7 @@ const Dashboard: React.FC<{ configuration: IViewConfiguration }> = ({ configurat
       {config.items.map((item, index) => {
         return (
           <Grid item key={index} xs={item.cols || 12}>
-            <Paper elevation={2} className={classes.item}>
+            <Paper elevation={2} className={item.rows == 2 ? classes.itemX2 : classes.item}>
               {TypeToDashboardItem(item)}
             </Paper>
           </Grid>

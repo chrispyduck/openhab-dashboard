@@ -19,7 +19,11 @@ interface IconDictionary {
 
 const Icons = IconsImport as unknown as IconDictionary;
 
-const Icon: React.FC<{ icon: string }> = ({ icon }) => {
+interface IconProps {
+  icon: string,
+}
+
+const Icon: React.FC<IconProps> = ({ icon }) => {
   const nameParts = icon.split(":");
   let libraryName, iconName;
   if (nameParts.length == 2) {
@@ -38,7 +42,7 @@ const Icon: React.FC<{ icon: string }> = ({ icon }) => {
       const Icon = Icons[iconName] as any;
       if (!Icon)
         break;
-      return <Icon />;
+      return <Icon size="large" />;
     }
 
     case "fab":
