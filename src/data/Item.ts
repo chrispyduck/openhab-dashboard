@@ -45,6 +45,14 @@ export class Item {
   };
 
   @observable
+  private lastUpdated$: Date = new Date();
+
+  @computed
+  public getLastUpdated = (): Date => {
+    return this.lastUpdated$;
+  }
+
+  @observable
   private value$: string | undefined = undefined;
 
   @computed

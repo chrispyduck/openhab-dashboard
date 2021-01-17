@@ -11,11 +11,13 @@ import Media from "./widgets/Media";
 
 const useStyles = makeStyles((theme) => ({
   item: {
+    position: "relative",
     margin: theme.spacing(1),
     height: "116px",
     display: "flex"
   },
   itemX2: {
+    position: "relative",
     margin: theme.spacing(1),
     height: `${theme.spacing(1) + (116 * 2)}px`,
     display: "flex"

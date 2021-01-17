@@ -1,16 +1,19 @@
 import { OAuth2Client } from "google-auth-library/build/src/auth/oauth2client";
-import { login as doLogin } from "./auth";
 import { IGooglePhotoFrameConfiguration } from "../configuration";
-import { MediaItemsTable, AlbumsTable } from "./storage";
+import { MediaItemsTable, AlbumsTable, CredentialsTable } from "./storage";
 import { MediaItem } from "./MediaItem";
 import { Album } from "./Album";
 import { IQuery, IMediaItemQuery, IMediaItem, IMediaItemsResults, IPagedResults, IAlbumResults } from "./model"
 import { GaxiosResponse } from "gaxios";
+import { Credentials } from "google-auth-library/build/src/auth/credentials";
 
 const LOCAL_STORAGE_PREFIX = "screensaver.googlePhotos";
 const MEDIA_ITEM_COUNT_KEY = "mediaItemCount";
 const ENDPOINT_ALBUMS_LIST = "https://photoslibrary.googleapis.com/v1/albums";
 const ENDPOINT_MEDIAITEMS_SEARCH = "https://photoslibrary.googleapis.com/v1/mediaItems:search"
+const SCOPES = [
+  "https://www.googleapis.com/auth/photoslibrary.readonly"
+];
 
 export class GooglePhotos {
 
@@ -31,12 +34,48 @@ export class GooglePhotos {
     return this.client$;
   }
 
+  private getSavedToken = async (): Promise<Credentials | undefined> => {
+    const result = await CredentialsTable.get("google:" + this.config.oAuthClientId);
+    return result?.key;
+  }
+
+  private saveToken = async (key: Credentials): Promise<void> => {
+    await CredentialsTable.put({
+      id: "google:" + this.config.oAuthClientId,
+      key
+    })
+  }
+
   /**
    * Authenticates to the Google Photos API, configures the OAuth2 client, and synchronizes local data. 
    */
   public init = async (): Promise<void> => {
-    this.client$ = await doLogin(this.config);
-    await this.syncAlbums();
+    const client = new OAuth2Client(this.config.oAuthClientId, this.config.oAuthClientSecret, window.location.toString());
+    client.forceRefreshOnFailure = true;
+    
+    const queryParams = new URLSearchParams(window.location.search);
+    if (queryParams && queryParams.has("code")) {
+      const code = queryParams.get("code");
+      if (code) {
+        const token = await client.getToken(code)
+        await this.saveToken(token.tokens);
+      }
+    }
+
+    const savedToken = await this.getSavedToken();
+    if (savedToken) {
+      client.setCredentials(savedToken);
+      this.client$ = client;
+      await this.syncAlbums();
+    } else {
+      const url = client.generateAuthUrl({
+        access_type: "offline",
+        scope: SCOPES,
+      });
+      window.location.href = url;
+    }
+    
+    
   }
 
   private needsSync(key: string): boolean {

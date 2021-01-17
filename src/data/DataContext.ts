@@ -127,10 +127,8 @@ export default class DataContext extends EventEmitter {
       const item = this.items[topicParts[2]];
       if (item) {
         item.handleStatusEvent(topicParts[3], event);
-        console.info(`${event.topic} = ${event.payload.value} (${event.payload.type})`);
+        console.debug(`${event.topic} = ${event.payload.value} (${event.payload.type})`);
       }
-    } else {
-      console.debug(`${event.topic} = ${event.payload.value} (${event.payload.type})`);
     }
   }
 }

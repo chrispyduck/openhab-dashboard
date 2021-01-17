@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme: Theme) =>
       right: theme.spacing(2),
       textAlign: "right",
       color: "#fff",
-      textShadow: "1px 1px #000",
+      textShadow: "0px 0px 4px #000",
+      opacity: 0.9,
     },
     albums: {
       margin: theme.spacing(1),

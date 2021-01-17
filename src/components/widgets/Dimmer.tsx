@@ -6,6 +6,7 @@ import Icon from "../Icon";
 import { IDimmer } from "../../data/configuration/Items";
 import DataContext from "../DataContext";
 import { observer } from "mobx-react";
+import LastUpdated from "../LastUpdated";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -82,39 +83,42 @@ const DimmerView = ({ item, config }: { item: Item, config: IDimmer }) => {
   };
 
   return (
-    <Grid container direction="row" justify="space-between">
-      <Grid item>
-        <Fab color={isOn ? "primary" : "default"} aria-label="toggle" onClick={togglePower} className={classes.button}>
-          <Icon icon={config.icon} />
-        </Fab>
-      </Grid>
-      <Grid item container xs className={classes.content}>
-        <Grid item container direction="column">
-          <Grid item xs>
-            <Typography gutterBottom variant="subtitle1" className={classes.itemName}>
-              {item.getDisplayName()}
-            </Typography>
-          </Grid>
-          <Grid item xs className={classes.sliderCell}>
-            <Slider value={currentValue}
-              onChange={handleChange}
-              aria-labelledby="continuous-slider"
-              className={classes.slider}
-              min={-10}
-              max={100}
-              step={1}
-              marks={[
-                { value: -10, label: "Off" },
-                { value: 1, label: "Min" },
-                { value: 25, label: "25%" },
-                { value: 50, label: "50%" },
-                { value: 75, label: "75%" },
-                { value: 100, label: "100%" }
-              ]} />
+    <>
+      <Grid container direction="row" justify="space-between">
+        <Grid item>
+          <Fab color={isOn ? "primary" : "default"} aria-label="toggle" onClick={togglePower} className={classes.button}>
+            <Icon icon={config.icon} />
+          </Fab>
+        </Grid>
+        <Grid item container xs className={classes.content}>
+          <Grid item container direction="column">
+            <Grid item xs>
+              <Typography gutterBottom variant="subtitle1" className={classes.itemName}>
+                {item.getDisplayName()}
+              </Typography>
+            </Grid>
+            <Grid item xs className={classes.sliderCell}>
+              <Slider value={currentValue}
+                onChange={handleChange}
+                aria-labelledby="continuous-slider"
+                className={classes.slider}
+                min={-10}
+                max={100}
+                step={1}
+                marks={[
+                  { value: -10, label: "Off" },
+                  { value: 1, label: "Min" },
+                  { value: 25, label: "25%" },
+                  { value: 50, label: "50%" },
+                  { value: 75, label: "75%" },
+                  { value: 100, label: "100%" }
+                ]} />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+      <LastUpdated item={item}/>
+    </>
   );
 };
 
