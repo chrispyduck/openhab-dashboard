@@ -1,3 +1,11 @@
+export interface IPagedResults {
+  nextPageToken: string;
+}
+
+export interface IQuery {
+  pageSize?: number;
+  pageToken?: string;
+}
 
 export interface IMediaItem {
   id: string,
@@ -34,7 +42,35 @@ export interface IMediaItem {
   filename: string
 }
 
-export interface IMediaItemsResults {
-  nextPageToken: string;
+export interface IMediaItemQuery extends IQuery {
+  albumId: string,
+}
+
+export interface IMediaItemsResults extends IPagedResults {
   mediaItems: Array<IMediaItem>;
+}
+
+export interface IAlbum {
+  id: string,
+  title: string,
+  productUrl: string,
+  isWriteable: boolean,
+  shareInfo: {
+    sharedAlbumOptions: {
+      isCollaborative: boolean,
+      isCommentable: boolean
+    },
+    shareableUrl: string,
+    shareToken: string,
+    isJoined: boolean,
+    isOwned: boolean,
+    isJoinable: boolean
+  },
+  mediaItemsCount: string,
+  coverPhotoBaseUrl: string,
+  coverPhotoMediaItemId: string
+}
+
+export interface IAlbumResults extends IPagedResults {
+  albums: Array<IAlbum>;
 }

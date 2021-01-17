@@ -123,7 +123,7 @@ export default class DataContext extends EventEmitter {
   private handleItemUpdate = (event: EventMessage<ItemStateEvent>): void => {
     //smarthome/items/unifi_ChrisPhone_PhoneRSSI/state = 31 (Decimal)
     const topicParts = event.topic.split("/");
-    if (topicParts.length >= 4 && topicParts[0] == "smarthome" && topicParts[1] == "items") {
+    if (topicParts.length >= 4 && topicParts[1] == "items") {
       const item = this.items[topicParts[2]];
       if (item) {
         item.handleStatusEvent(topicParts[3], event);
