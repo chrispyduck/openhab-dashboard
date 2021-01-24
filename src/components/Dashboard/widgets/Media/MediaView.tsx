@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { ButtonGroup, Button, Grid } from "@material-ui/core";
-import Icon from "../../Icon";
+import Icon from "components/Icon";
 import { IMediaProps } from "./IMediaProps";
 import { BaseCSSProperties } from "@material-ui/core/styles/withStyles";
 
@@ -98,8 +98,7 @@ const useStyles = makeStyles<Theme, LocalStyles, any>((theme: Theme) => {
     },
     dPad: {
       position: "relative",
-      width: "200px",
-      height: "200px",
+      margin: theme.spacing(1),
       borderRadius: "48%",
       overflow: "hidden",
       "&::before": {
@@ -144,9 +143,10 @@ const useStyles = makeStyles<Theme, LocalStyles, any>((theme: Theme) => {
     },
 
     miscButton: {
-      width: "48px",
-      height: "48px",
-      transform: "scale(1.3)",
+      width: "54px",
+      height: "54px",
+      transform: "scale(1.4)",
+      margin: theme.spacing(2),
     },
   };
   // eslint-disable-next-line
@@ -159,10 +159,15 @@ export const MediaView: React.FC<IMediaProps> = (props) => {
     props.item.send(cmd);
   };
 
+  const size = `${(props.config.rows || 1) * 108}px`;
+
   return (
     <Grid container className={classes.root}>
       <Grid item xs={8}>
-        <ButtonGroup variant="contained" color="primary" className={classes.dPad}>
+        <ButtonGroup variant="contained" color="primary" className={classes.dPad} style={{
+          width: size,
+          height: size,
+        }}>
           <Button className={classes.dPadUp} onClick={() => send(props.config.commands.directionPad.up)}>
             <div className={classes.dPadLabel}>
               <Icon icon="material:ExpandLess" />
@@ -225,6 +230,18 @@ export const MediaView: React.FC<IMediaProps> = (props) => {
             className={classes.miscButton}
             onClick={() => send(props.config.commands.volume.up)}>
             <Icon icon="material:VolumeUp" />
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Button color="primary"
+            className={classes.miscButton}
+            onClick={() => send(props.config.commands.back)}>
+            <Icon icon="material:Undo" />
+          </Button>
+          <Button color="primary"
+            className={classes.miscButton}
+            onClick={() => send(props.config.commands.home)}>
+            <Icon icon="material:Home" />
           </Button>
         </Grid>
       </Grid>

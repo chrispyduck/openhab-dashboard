@@ -1,4 +1,4 @@
-import { Item } from "../../../data/Item";
+import { Item } from "data/Item";
 import { IMediaConfig } from "./IMediaConfig";
 
 export interface IMediaProps {

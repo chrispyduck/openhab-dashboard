@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
-import { Item, EmptyItem } from "../../data/Item";
+import { Item, EmptyItem } from "data/Item";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
-import Icon from "../Icon";
-import { IIndoorEnvironment } from "../../data/configuration/Items";
-import DataContext from "../DataContext";
+import Icon from "components/Icon";
+import { IIndoorEnvironment } from "components/Dashboard/widgets/IIndoorEnvironment";
+import DataContext from "components/DataContext";
 import { observer } from "mobx-react";
+import LastUpdated from "components/LastUpdated";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,15 +30,18 @@ const IndoorEnvironmentView = (props: {
   const classes = useStyles();
 
   return (
-    <Grid container direction="row" justify="space-between" alignItems="center" className={classes.root}>
-      <Grid item xs={5} className={classes.icon}>
-        <Icon icon="fas:thermometer-half" />
+    <>
+      <Grid container direction="row" justify="space-between" alignItems="center" className={classes.root}>
+        <Grid item xs={5} className={classes.icon}>
+          <Icon icon="fas:thermometer-half" />
+        </Grid>
+        <Grid item className={classes.values} xs={7}>
+          <Typography variant="h5">{Math.round(Number.parseFloat(props.roomTemperature.getValue() || "0") * 10) / 10} °F</Typography>
+          <Typography variant="subtitle1">{Math.round(Number.parseFloat(props.roomHumidity.getValue() || "0"))} %</Typography>
+        </Grid>
       </Grid>
-      <Grid item className={classes.values} xs={7}>
-        <Typography variant="h5">{Math.round(Number.parseFloat(props.roomTemperature.getValue() || "0") * 10) / 10} °F</Typography>
-        <Typography variant="subtitle1">{Math.round(Number.parseFloat(props.roomHumidity.getValue() || "0"))} %</Typography>
-      </Grid>
-    </Grid>
+      <LastUpdated items={[props.roomTemperature, props.roomHumidity]} />
+    </>
   );
 };
 

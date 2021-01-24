@@ -56,6 +56,10 @@ export default class LiveEvents extends EventEmitter {
         });
         break;
       }
+      case "ThingStatusInfoEvent": {
+        // ignore - we aren't processing things
+        break;
+      }
       default: {
         console.debug(`Unrecognized event payload type ${data.type} for ${data.topic}`, payload);
       }

@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { Item } from "../../data/Item";
+import { Item } from "data/Item";
 import { makeStyles } from "@material-ui/core/styles";
 import { Fab, Grid, Slider, Typography } from "@material-ui/core";
-import Icon from "../Icon";
-import { IDimmer } from "../../data/configuration/Items";
-import DataContext from "../DataContext";
+import Icon from "components/Icon";
+import { IDimmer } from "components/Dashboard/widgets/IDimmer";
+import DataContext from "components/DataContext";
 import { observer } from "mobx-react";
-import LastUpdated from "../LastUpdated";
+import LastUpdated from "components/LastUpdated";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -94,7 +94,7 @@ const DimmerView = ({ item, config }: { item: Item, config: IDimmer }) => {
           <Grid item container direction="column">
             <Grid item xs>
               <Typography gutterBottom variant="subtitle1" className={classes.itemName}>
-                {item.getDisplayName()}
+                {config.title ? config.title : item.getDisplayName()}
               </Typography>
             </Grid>
             <Grid item xs className={classes.sliderCell}>
@@ -117,7 +117,7 @@ const DimmerView = ({ item, config }: { item: Item, config: IDimmer }) => {
           </Grid>
         </Grid>
       </Grid>
-      <LastUpdated item={item}/>
+      <LastUpdated items={[item]}/>
     </>
   );
 };

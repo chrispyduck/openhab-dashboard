@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import DataContext from "./DataContext";
 import { Paper, Dialog, createStyles, makeStyles } from "@material-ui/core";
 import { useIdle } from "react-use";
-import { IScreensaverConfiguration } from "../data/configuration/Screensaver";
+import { IScreensaverConfiguration } from "data/configuration/Screensaver";
 import GooglePhotoFrame from "./screensavers/GooglePhotoFrame";
 import { IScreensaverProps } from "./screensavers/IScreensaverProps";
 

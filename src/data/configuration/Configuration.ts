@@ -1,4 +1,4 @@
-import { ITopBarConfiguration } from "./TopBar";
+import { ITopBarConfiguration } from "components/TopBar";
 import { IOpenHABConfiguration } from "./OpenHABConfiguration";
 import { IViewCollection } from "./Views";
 import { IScreensaverConfiguration } from "./Screensaver";

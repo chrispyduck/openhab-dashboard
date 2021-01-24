@@ -1,4 +1,4 @@
-import { IScreensaverConfiguration } from "../../../data/configuration/Screensaver";
+import { IScreensaverConfiguration } from "data/configuration/Screensaver";
 
 export interface IGooglePhotoFrameConfiguration extends IScreensaverConfiguration {
   type: "google-photos";

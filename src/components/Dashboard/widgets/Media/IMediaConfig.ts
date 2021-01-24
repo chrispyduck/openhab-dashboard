@@ -1,5 +1,6 @@
 
-import { IDashboardItem, IDisplaySettings } from "../../../data/configuration/Items";
+import { IDisplaySettings } from "data/configuration/Items";
+import { IDashboardWidget } from "../../IDashboardWidget";
 
 export const DefaultConfiguration: IMediaConfig = {
   type: "media",
@@ -25,10 +26,12 @@ export const DefaultConfiguration: IMediaConfig = {
     skipForward: "SkipForward",
     rewind: "Rewind",
     skipBackwards: "SkipBackward",
+    back: "Back",
+    home: "Home",
   }
 }
 
-export interface IMediaConfig extends IDashboardItem, IDisplaySettings {
+export interface IMediaConfig extends IDashboardWidget, IDisplaySettings {
   type: "media",
 
   /**
@@ -55,5 +58,7 @@ export interface IMediaConfig extends IDashboardItem, IDisplaySettings {
     skipForward: string,
     rewind: string,
     skipBackwards: string,
+    back: string,
+    home: string,
   }
 }

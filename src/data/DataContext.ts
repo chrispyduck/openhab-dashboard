@@ -13,6 +13,7 @@ export default class DataContext extends EventEmitter {
   constructor() {
     super();
     this.events.on("ItemState", this.handleItemUpdate);
+    this.timer = setTimeout(this.checkForOutdatedItems, 60e3);
     makeObservable(this);
   }
 
@@ -34,6 +35,7 @@ export default class DataContext extends EventEmitter {
 
   private readonly itemsApi = new ItemsApi();
   private readonly events = new LiveEvents();
+  private timer: NodeJS.Timeout;
   private baseUrl = "";
 
   @observable
@@ -130,5 +132,18 @@ export default class DataContext extends EventEmitter {
         console.debug(`${event.topic} = ${event.payload.value} (${event.payload.type})`);
       }
     }
+  }
+
+  private checkForOutdatedItems = async (): Promise<void> => {
+    const now = new Date().getTime();
+    const threshold = now - 60e3; // 1 minute
+    const items = Object.values(this.items);
+    for (let i = 0; i < items.length; i++) {
+      if (!!items[i] && items[i].getLastUpdated().getTime() < threshold) {
+        console.warn(`Value for ${items[i].name} is stale. Refreshing.`);
+        await items[i].fetchCurrentValue();
+      }
+    }
+    this.timer = setTimeout(this.checkForOutdatedItems, 60e3);
   }
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { default as DataContextClass } from "../data/DataContext";
+import { default as DataContextClass } from "data/DataContext";
 
 const instance = new DataContextClass();
 const DataContext = React.createContext(instance);

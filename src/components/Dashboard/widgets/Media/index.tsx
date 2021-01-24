@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { EmptyItem } from "../../../data/Item";
-import DataContext from "../../DataContext";
+import { EmptyItem } from "data/Item";
+import DataContext from "components/DataContext";
 import { observer } from "mobx-react";
 import { IMediaConfig, DefaultConfiguration } from "./IMediaConfig";
 import { MediaView } from "./MediaView";

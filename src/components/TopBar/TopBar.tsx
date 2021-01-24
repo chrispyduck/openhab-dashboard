@@ -5,10 +5,10 @@ import { AppBar, Toolbar, IconButton, Typography, List, ListItem, ListItemText, 
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import DataContext from "./DataContext";
+import DataContext from "components/DataContext";
 import Clock from "./Clock";
 import CurrentView from "./CurrentView";
-import ItemStatusDisplay from "./ItemStatusDisplay";
+import TopBarItem from "./TopBarItem";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -103,9 +103,9 @@ const TopBar: React.FC = () => {
               <div className={classes.grow} />
             </>
           )}
-          {Object.values(data.configuration.topbar.items).map((item, index) => (
+          {Object.values(data.configuration.topbar.items).map((widgetConfig, index) => (
             <span className={classes.items} key={index}>
-              <ItemStatusDisplay item={item} />
+              <TopBarItem config={widgetConfig} />
             </span>
           ))}
           <IconButton edge="start" className={classes.refreshButton} color="inherit" aria-label="refresh" onClick={refresh}>

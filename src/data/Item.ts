@@ -83,6 +83,7 @@ export class Item {
     const detail = await this.client.getDetailAsync(this.name);
     runInAction(() => {
       this.displayName$ = detail.label || detail.name;
+      this.lastUpdated$ = new Date();
       this.value$ = detail.state;
       this.type = detail.type;
       this.category = detail.category;

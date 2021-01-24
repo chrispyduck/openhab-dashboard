@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import DataContext from "./DataContext";
-import Dashboard from "./Dashboard";
-import { IViewConfiguration } from "../data/configuration/Views";
-import TopBar from "./TopBar";
+import Dashboard from "./Dashboard/Dashboard";
+import { IViewConfiguration } from "data/configuration/Views";
+import { TopBar } from "./TopBar";
 import { Switch, Route, Redirect, useRouteMatch } from "react-router-dom";
 
 import Screensaver from "./Screensaver";

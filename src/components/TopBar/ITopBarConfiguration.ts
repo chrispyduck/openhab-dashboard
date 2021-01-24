@@ -1,4 +1,5 @@
-import { IItemDisplaySettings } from "./Items";
+import { ITopBarWidget } from "./widgets/ITopBarWidget";
+import { ITopBarTimeConfiguration } from "./ITopBarTimeConfiguration";
 
 export interface ITopBarConfiguration {
   /**
@@ -11,17 +12,5 @@ export interface ITopBarConfiguration {
    * These items are aligned to the right of the bar.
    * Items that support a discrete list of commands will display those commands as a menu when clicked.
    */
-  items: { [key: string]: IItemDisplaySettings; };
-}
-
-export interface ITopBarTimeConfiguration {
-  /**
-   * If true, the current time will be displayed in the top bar
-   */
-  show: boolean;
-
-  /**
-   * See https://www.npmjs.com/package/dateformat for a list of supported format options
-   */
-  format: string;
+  items: { [key: string]: ITopBarWidget; };
 }
