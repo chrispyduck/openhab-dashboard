@@ -1,10 +1,10 @@
 import React from "react";
-import ItemCommandDisplay from "./widgets/ItemCommandWidget";
+import { ItemCommandWidget } from "./widgets/ItemCommand/ItemCommand";
 import { ITopBarWidget } from "./widgets/ITopBarWidget";
 
 type ItemMappings = { [key: string]: React.ElementType };
 const DashboardItemMappings: ItemMappings = {
-  "command": ItemCommandDisplay,
+  "command": ItemCommandWidget,
 };
 
 const TopBarItem: React.FC<{

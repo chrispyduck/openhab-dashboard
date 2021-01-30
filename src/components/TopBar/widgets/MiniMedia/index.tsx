@@ -1,0 +1,1 @@
+export { MiniMediaWidget } from "./MiniMedia";

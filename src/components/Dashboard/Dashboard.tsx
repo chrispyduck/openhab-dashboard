@@ -1,10 +1,11 @@
 import React from "react";
-import { IDashboardWidget } from "./IDashboardWidget";
+import { IDashboardWidget, DefaultConfiguration as DefaultWidgetConfiguration } from "./IDashboardWidget";
 import { IViewConfiguration, IDashboardConfiguration } from "data/configuration/Views";
 import { Item } from "data/Item";
 import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DashboardWidget from "./DashboardWidget";
+import { merge } from "lodash";
 
 const useStyles = makeStyles((theme) => ({
   item: {
@@ -38,11 +39,15 @@ const Dashboard: React.FC<{ configuration: IViewConfiguration }> = ({ configurat
   const config = configuration as IDashboardConfiguration;
   return (
     <Grid container>
-      {config.items.map((item, index) => {
+      {config.items.map((rawItemConfig, index) => {
+        const itemConfig = merge({}, DefaultWidgetConfiguration, rawItemConfig);
         return (
-          <Grid item key={index} xs={item.cols || 12}>
-            <Paper elevation={2} className={item.rows == 3 ? classes.itemX3 : item.rows == 2 ? classes.itemX2 : classes.item}>
-              <DashboardWidget config={item}/>
+          <Grid item key={index} xs={itemConfig.cols || 12}>
+            <Paper
+              elevation={itemConfig.frame ? 2 : 0}
+              className={itemConfig.rows == 3 ? classes.itemX3 : itemConfig.rows == 2 ? classes.itemX2 : classes.item}
+            >
+              <DashboardWidget config={itemConfig} />
             </Paper>
           </Grid>
         );

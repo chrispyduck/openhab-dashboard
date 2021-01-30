@@ -23,10 +23,10 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(1),
   },
   refreshButton: {
-    marginLeft: theme.spacing(2),
+    marginLeft: theme.spacing(0),
   },
   title: {
     marginRight: theme.spacing(2),
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   items: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(1),
   },
   content: {
     flexGrow: 1,

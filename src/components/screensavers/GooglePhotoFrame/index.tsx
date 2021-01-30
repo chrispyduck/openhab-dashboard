@@ -122,3 +122,5 @@ const PhotoFrameConfigContainer: React.FC<IScreensaverProps> = (props) => {
 }
 
 export default PhotoFrameConfigContainer;
+
+export { GoogleAuthHelper } from "./GoogleAuthHelper";

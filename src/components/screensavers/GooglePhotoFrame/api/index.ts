@@ -50,7 +50,10 @@ export class GooglePhotos {
    * Authenticates to the Google Photos API, configures the OAuth2 client, and synchronizes local data. 
    */
   public init = async (): Promise<void> => {
-    const client = new OAuth2Client(this.config.oAuthClientId, this.config.oAuthClientSecret, window.location.toString());
+    const url = document.createElement("a");
+    url.href = "/google-auth/";
+
+    const client = new OAuth2Client(this.config.oAuthClientId, this.config.oAuthClientSecret, url.href);
     client.forceRefreshOnFailure = true;
     
     const queryParams = new URLSearchParams(window.location.search);

@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { makeStyles } from "@material-ui/core/styles";
 import DataContext from "components/DataContext";
 import { Item } from "data/Item";
-import { IItemCommandWidget } from "./IItemCommandWidget";
+import { IItemCommandConfig } from "./IItemCommandConfig";
 import { Grid, Menu, MenuItem, Button, ListItemIcon, ListItemText } from "@material-ui/core";
 import Icon from "components/Icon";
-import { ITopBarWidget } from "./ITopBarWidget";
+import { ITopBarWidget } from "../ITopBarWidget";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,16 +25,38 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     padding: 0,
+  },
+  title: {
+    position: "relative",
+    top: theme.spacing(-1),
+    marginTop: 0,
+    marginBottom: theme.spacing(-0.5),
+    lineHeight: 2,
+    textAlign: "center",
+    fontWeight: "normal",
+    letterSpacing: "0.3px",
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.contrastText,
   }
 }));
 
 const ItemCommandWidgetView: React.FC<{
+  config: IItemCommandConfig,
   item: Item,
   icon?: string,
 }> = (props) => {
   const [anchorElement, setAnchorElement] = React.useState<null | HTMLElement>(null);
   const classes = useStyles();
+  const supportedCommands = props.item.supportedCommands?.length
+    ? props.item.supportedCommands
+    : props.config.commands;
   const currentValue = props.item.getValue();
+  let currentValueText = currentValue;
+  if (supportedCommands) {
+    const currentCmd = supportedCommands.find(c => c.command == currentValue);
+    if (currentCmd && currentCmd.displayName)
+      currentValueText = currentCmd.displayName;
+  }
   const content = (
     <Grid container className={classes.root} alignItems="center">
       {!!props.icon && (
@@ -43,11 +65,13 @@ const ItemCommandWidgetView: React.FC<{
         </Grid>
       )}
       <Grid item className={classes.text}>
-        {currentValue}
+        {currentValueText}
       </Grid>
     </Grid>
   );
-  if (props.item.supportedCommands?.length == 0)
+
+
+  if (!supportedCommands?.length)
     // no supported commands; don't show a menu
     return content;
 
@@ -56,7 +80,7 @@ const ItemCommandWidgetView: React.FC<{
   };
 
   const childrenToRender = Children.toArray(props.children);
-  const menuItems = props.item.supportedCommands.map(cmd => (
+  const menuItems = supportedCommands.map(cmd => (
     <MenuItem key={cmd.command} onClick={() => {
       props.item.send(cmd.command);
       closeMenu();
@@ -72,6 +96,27 @@ const ItemCommandWidgetView: React.FC<{
     </MenuItem>
   ));
 
+  const menuChildren = childrenToRender.length > 0
+    ? [
+      <Grid container>
+        <Grid item>
+          {childrenToRender}
+        </Grid>
+        <Grid item>
+          {menuItems}
+        </Grid>
+      </Grid>
+    ] : (
+      menuItems
+    )
+
+  if (props.config.title)
+    menuChildren.unshift(
+      <h4 className={classes.title}>
+        {props.config.title}
+      </h4>
+    );
+
   return (
     <>
       <Button aria-controls={`item-${props.item.name}-menu`} aria-haspopup="true" color="inherit"
@@ -86,46 +131,28 @@ const ItemCommandWidgetView: React.FC<{
         open={Boolean(anchorElement)}
         onClose={closeMenu}
       >
-        <>
-          {childrenToRender.length > 0
-            ? (
-              <>
-                <Grid container>
-                  <Grid item>
-                    {childrenToRender}
-                  </Grid>
-                  <Grid item>
-                    {menuItems}
-                  </Grid>
-                </Grid>
-              </>
-            ) : (
-              menuItems
-            )}
-        </>
+        {menuChildren}
       </Menu>
     </>
   );
 };
 
-const ItemCommandWidgetObserved = observer(ItemCommandWidgetView);
+export const ItemCommandWidgetObserved = observer(ItemCommandWidgetView);
 
 /**
  * Displays the current status as text. When the text is clicked, a menu is rendered allowing the user to
  * select a different status. If children are provided, they are rendered to the left.
  */
-const ItemCommandWidget: React.FC<{
+export const ItemCommandWidget: React.FC<{
   config: ITopBarWidget,
   icon?: string
 }> = (props) => {
   const data = useContext(DataContext);
-  const commandConfig = props.config as IItemCommandWidget;
+  const commandConfig = props.config as IItemCommandConfig;
   const item = data.getItem(commandConfig.itemName);
 
   if (!item)
     return null;
 
-  return <ItemCommandWidgetObserved item={item as Item} icon={props.icon} />;
+  return <ItemCommandWidgetObserved config={commandConfig} item={item as Item} icon={props.icon} />;
 };
-
-export default ItemCommandWidget;
