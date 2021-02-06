@@ -10,26 +10,29 @@ import LastUpdated from "components/LastUpdated";
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    height: "6em",
-    width: "6em",
-    margin: theme.spacing(2),
+    height: "5.7em",
+    width: "5.7em",
+    margin: theme.spacing(1),
+    marginTop: theme.spacing(1.3),
+    marginLeft: theme.spacing(2),
   },
   content: {
     flexGrow: 1,
     height: "6em",
+    marginRight: theme.spacing(4),
   },
   sliderCell: {
     flexGrow: 1,
-    maxWidth: "91%" //todo: "93%" is needed to make this look good on chrome
+    //maxWidth: "91%" //todo: "93%" is needed to make this look good on chrome
   },
   slider: {
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(0),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
   },
   itemName: {
     marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(0),
+    marginBottom: theme.spacing(-1),
     marginLeft: theme.spacing(2),
     textAlign: "left",
   }

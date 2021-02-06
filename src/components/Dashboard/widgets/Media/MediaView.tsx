@@ -223,7 +223,7 @@ export const MediaView: React.FC<IMediaProps> = (props) => {
         <Grid item xs={12}>
           <Button color="primary"
             className={classes.miscButton}
-            onClick={() => send(props.config.commands.volume.up)}>
+            onClick={() => send(props.config.commands.volume.down)}>
             <Icon icon="material:VolumeDown" />
           </Button>
           <Button color="primary"

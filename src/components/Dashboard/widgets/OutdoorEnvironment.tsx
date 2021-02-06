@@ -42,7 +42,7 @@ const OutdoorEnvironmentView: React.FC<{
     <>
       <Grid container direction="row" justify="space-between" alignItems="center" className={classes.root}>
         <Grid item xs={5} className={classes.icon}>
-          <img src={`http://openweathermap.org/img/wn/${props.outdoorConditionIconId.getValue()}@2x.png`}
+          <img src={`//openweathermap.org/img/wn/${props.outdoorConditionIconId.getValue()}@2x.png`}
             alt={props.outdoorConditions.getValue()} />
         </Grid>
         <Grid item className={classes.values} xs={7}>

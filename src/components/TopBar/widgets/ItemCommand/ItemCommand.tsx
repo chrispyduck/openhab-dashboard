@@ -80,8 +80,8 @@ const ItemCommandWidgetView: React.FC<{
   };
 
   const childrenToRender = Children.toArray(props.children);
-  const menuItems = supportedCommands.map(cmd => (
-    <MenuItem key={cmd.command} onClick={() => {
+  const menuItems = supportedCommands.map((cmd, idx) => (
+    <MenuItem key={idx} onClick={() => {
       props.item.send(cmd.command);
       closeMenu();
     }}>
